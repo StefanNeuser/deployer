@@ -26,21 +26,9 @@ task('yarn', function ()
     run('cd {{release_path}} && npm run prod');
 });
 
-task('vendor:publish', function ()
-{
-    run('rm -rf {{release_path}}/public/vendor/crm');
-    run('cd {{release_path}} && php artisan vendor:publish --provider="By247APPS\ShopifyAppCrm\ShopifyAppCrmProvider" --tag=shopify-app-crm-public-assets');
-});
-
 task('wsdl:generate', function ()
 {
     run('cd {{release_path}} && php artisan wsdl:generate');
-});
-
-task('setup:crm', function ()
-{
-    run('mkdir {{release_path}}/crm');
-    run('cd {{release_path}}/crm && git clone https://github.com/247apps-de/shopify-app-crm.git -b dhl .');
 });
 
 task('setup:laravel-shopify', function ()
