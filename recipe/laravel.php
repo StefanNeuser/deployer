@@ -1,4 +1,5 @@
 <?php
+
 namespace Deployer;
 
 require_once __DIR__ . '/common.php';
@@ -19,7 +20,8 @@ set('writable_dirs', [
     'storage/logs',
 ]);
 set('log_files', 'storage/logs/*.log');
-set('laravel_version', function () {
+set('laravel_version', function ()
+{
     $result = run('{{bin/php}} {{release_path}}/artisan --version');
     preg_match_all('/(\d+\.?)+/', $result, $matches);
     return $matches[0][0] ?? 5.5;
@@ -42,20 +44,24 @@ set('laravel_version', function () {
  */
 function artisan($command, $options = [])
 {
-    return function () use ($command, $options) {
+    return function () use ($command, $options)
+    {
         $versionTooEarly = array_key_exists('min', $options)
             && laravel_version_compare($options['min'], '<');
 
         $versionTooLate = array_key_exists('max', $options)
             && laravel_version_compare($options['max'], '>');
 
-        if ($versionTooEarly || $versionTooLate) {
+        if ($versionTooEarly || $versionTooLate)
+        {
             return;
         }
-        if (in_array('failIfNoEnv', $options) && !test('[ -s {{release_path}}/.env ]')) {
+        if (in_array('failIfNoEnv', $options) && !test('[ -s {{release_path}}/.env ]'))
+        {
             throw new \Exception('Your .env file is empty! Cannot proceed.');
         }
-        if (in_array('skipIfNoEnv', $options) && !test('[ -s {{release_path}}/.env ]')) {
+        if (in_array('skipIfNoEnv', $options) && !test('[ -s {{release_path}}/.env ]'))
+        {
             warning("Your .env file is empty! Skipping...</>");
             return;
         }
@@ -66,7 +72,8 @@ function artisan($command, $options = [])
 
         $output = run("{{bin/php}} $artisan $command");
 
-        if (in_array('showOutput', $options)) {
+        if (in_array('showOutput', $options))
+        {
             writeln("<info>$output</info>");
         }
     };
@@ -98,9 +105,8 @@ task('artisan:migrate:status', artisan('migrate:status', ['showOutput']));
 desc('Execute artisan db:seed');
 task('artisan:db:seed', artisan('db:seed --force', ['showOutput']));
 
-desc('CACHE WILL NOT BE DROPPED');
-// desc('Execute artisan cache:clear');
-// task('artisan:cache:clear', artisan('cache:clear'));
+desc('Execute artisan cache:clear');
+task('artisan:cache:clear', artisan('cache:clear'));
 
 desc('Execute artisan config:clear');
 task('artisan:config:clear', artisan('config:clear'));
@@ -165,7 +171,8 @@ task('artisan:event:cache', artisan('event:cache', ['min' => '5.8.9']));
  * [Laravel filesystem configuration](https://laravel.com/docs/5.2/filesystem#configuration)
  */
 desc('Make symlink for public disk');
-task('deploy:public_disk', function () {
+task('deploy:public_disk', function ()
+{
     // Remove from source.
     run('if [ -d $(echo {{release_path}}/public/storage) ]; then rm -rf {{release_path}}/public/storage; fi');
 
