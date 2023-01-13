@@ -98,8 +98,9 @@ task('artisan:migrate:status', artisan('migrate:status', ['showOutput']));
 desc('Execute artisan db:seed');
 task('artisan:db:seed', artisan('db:seed --force', ['showOutput']));
 
-desc('Execute artisan cache:clear');
-task('artisan:cache:clear', artisan('cache:clear'));
+desc('CACHE WILL NOT BE DROPPED');
+// desc('Execute artisan cache:clear');
+// task('artisan:cache:clear', artisan('cache:clear'));
 
 desc('Execute artisan config:clear');
 task('artisan:config:clear', artisan('config:clear'));
